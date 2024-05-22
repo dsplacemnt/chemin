@@ -1,9 +1,18 @@
-import { Module } from '@nestjs/common';
-import { PrismaService } from './database/prisma.service';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { PrismaService } from './database/prisma/prisma.service';
+import { ConfigModule } from '@nestjs/config';
+import { FinanceModule } from './modules/finance/finance.module';
+import { LoggerMiddleware } from './middleware/logger.middleware';
 
 @Module({
-  imports: [],
+  imports: [ConfigModule.forRoot(), FinanceModule],
   controllers: [],
-  providers: [PrismaService],
+  providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes('movement');
+  }
+}
