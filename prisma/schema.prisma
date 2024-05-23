@@ -8,10 +8,399 @@ datasource db {
 }
 
 model Movement {
-  id Int @id @default(autoincrement())
-  value Float @default(0)
-  description String
-  type String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  @@map("movements")
+
+  id                  Int               @id @default(autoincrement())
+  description         String
+  value               Decimal
+  financialCategoryId Int               @map("financial_category_id")
+  financialCategory   FinancialCategory @relation(fields: [financialCategoryId], references: [id])
+  accountId           Int               @map("account_id")
+  account             Account           @relation(fields: [accountId], references: [id])
+  dateMaturity        DateTime?         @db.Date @map("date_maturity")
+  dateCompetency      DateTime?         @db.Date @map("date_competency")
+  datePayment         DateTime?         @db.Date @map("date_payment")
+  paymentMethods      String            @db.VarChar(255) @map("payment_methods")
+  userId              Int               @map("user_id")
+  user                User              @relation(fields: [userId], references: [id])
+  createdAt           DateTime          @default(now()) @map("created_at")
+  updated_at          DateTime          @default(now()) @map("updated_at")
+}
+
+model FinancialCategory {
+  @@map("financial_categories")
+
+  id        Int        @id @default(autoincrement())
+  name      String
+  type      String
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @default(now()) @map("updated_at")
+  entityId  Int        @map("entity_id")
+  entity    Entity     @relation(fields: [entityId], references: [id])
+  deleteAt  DateTime   @map("delete_at")
+  movement Movement[]
+}
+
+model Entity {
+  @@map("entities")
+
+  id                  Int                 @id @default(autoincrement())
+  name                String
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @default(now()) @map("updated_at")
+
+  financialCategories FinancialCategory[]
+  account             Account[]
+  status              Status[]
+  contact             Contact[]
+  image               Image[]
+  mktProfile         MktProfile[]
+  agreement           Agreement[]
+  doctor              Doctor[]
+  imports             Import[]
+}
+
+model Account {
+  @@map("accounts")
+  id           Int        @id @default(autoincrement()) //@db.UnsignedInt ??
+  name         String     @db.VarChar(255)
+  initialValue Decimal    @default(0.00) @map("initial_value") @db.Decimal(10, 2)
+  date         DateTime?  @db.Date
+  entityId     Int?       @map("entity_id")
+  entity       Entity?    @relation(fields: [entityId], references: [id])
+  createdAt    DateTime?  @map("created_at") @db.Timestamp(0)
+  updatedAt    DateTime?  @map("updated_at") @db.Timestamp(0)
+  primary      Int?
+  //appointment_packages appointment_packages[]
+  movement     Movement[]
+  //procedures           procedures[]
+}
+
+model User {
+  @@map("users")
+
+  id        Int       @id @default(autoincrement())
+  name      String  @db.VarChar(255)
+  email     String  @unique @db.VarChar(255)
+  password  String @db.VarChar(255)
+  remeberToken String?  @db.VarChar(100) @map("remeber_token")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  crefito  String?  @db.VarChar(255)
+  area String?  @db.VarChar(255)
+  lastLoginAt DateTime  @map("last_login_at")
+  lastEntityLogin Int  @map("last_entity_login")
+  qtyInteractions Int  @map("qty_interactions")
+  editUpdatePatients Int @map("edit_update_patients") // @db.TinyInt ??
+  informations String @db.Text
+  adminPartner Int @map("admin_partner") // @db.UnsignedInt ??
+  statusId Int @map("status_id") // @db.UnsignedInt ??
+  status Status? @relation(fields: [statusId], references: [id])
+  attendanceFinish Int @map("attendance_finish") // @db.TinyInt ??
+  attendanceAuthorization Int @map("attendance_authorization") // @db.TinyInt ??
+  deleteAt DateTime? @db.Timestamp() @map("delete_at")
+  importToken String? @db.VarChar(255) @map("import_token")
+  contactId Int? @map("contact_id") // @db.UnsignedInt ??
+  contact Contact? @relation(fields: [contactId], references: [id])
+
+  movements Movement[]
+  image Image[]
+  contacts Contact[] @relation("professionalIndicationUser")
+  imports Import[]
+}
+
+model Status {
+  @@map("status")
+
+  id        Int       @id @default(autoincrement())
+  name      String  @db.VarChar(255)
+  color    String  @db.VarChar(255)
+  entityId     Int?       @map("entity_id")
+  entity       Entity?    @relation(fields: [entityId], references: [id])
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  status Int // @db.TinyInt ??
+  deleteFinance Int @map("delete_finance") // @db.TinyInt ??
+  deleteReminders Int @map("delete_reminders") // @db.TinyInt ??
+  availableToLimitedProfessionals Int @map("available_to_limited_professionals") // @db.TinyInt ??
+  discounAppointmentPackage Int @map("discoun_appointment_package") // @db.TinyInt ??
+  createComissionPackages Int @map("create_comission_packages") // @db.TinyInt ??
+  notCountRoomLimit Int @map("not_count_room_limit") // @db.TinyInt ??
+  notCountProfessionalLimit Int @map("not_count_professional_limit") // @db.TinyInt ??
+
+  users User[]
+}
+
+model Contact {
+  @@map("contacts")
+
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(255)
+  documentName String @db.VarChar(255) @map("document_name")
+  slug    String    @db.VarChar(255)
+  gender String    @db.VarChar(255)
+  age Int
+  city String    @db.VarChar(255)
+  state String    @db.VarChar(255)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  dateBirth DateTime? @db.Date @map("date_birth")
+  address String    @db.Text
+  entityId Int @map("entity_id")
+  entity Entity? @relation(fields: [entityId], references: [id])
+  originEntityId Int @map("origin_entity_id")
+  maritalStatus String @db.VarChar(255) @map("marital_status")
+  profession String @db.VarChar(255)
+  companyName String @db.VarChar(255) @map("company_name")
+  cellphone String @db.VarChar(255)
+  cpf String @db.VarChar(255)
+  email String @db.VarChar(255)
+  imageId Int @map("image_id")
+  image Image? @relation("ImageContact", fields: [imageId], references: [id])
+  phone String @db.VarChar(255)
+  indication Int
+  agreement Int
+  agreementNumber String @db.VarChar(255) @map("agreement_number")
+  nameFather String @db.VarChar(255) @map("name_father")
+  cpfFather String @db.VarChar(255) @map("cpf_father")
+  nameMother String @db.VarChar(255) @map("name_mother")
+  cpfMother String @db.VarChar(255) @map("cpf_mother")
+  diagnosis String @db.VarChar(255)
+  agreementId Int @map("agreement_id")
+  agreements Agreement? @relation(fields: [agreementId], references: [id])
+  rg String @db.VarChar(255)
+  informations String @db.Text
+  cep String @db.VarChar(255)
+  allowAdminPartnerDataAccess Int @map("allow_admin_partner_data_access") // @db.TinyInt ??
+  deletedAt DateTime? @db.Timestamp() @map("deleted_at")
+  indicationType String @db.VarChar(255) @map("indication_type")
+  indicationText String @db.VarChar(255) @map("indication_text")
+  professionalIndicationId Int @map("professional_indication_id")
+  professionalIndication User? @relation("professionalIndicationUser" ,fields: [professionalIndicationId], references: [id])
+  doctorIndicationId Int @map("doctor_indication_id")
+  doctorIndication Doctor? @relation(fields: [doctorIndicationId], references: [id])
+  neighborhood String @db.VarChar(255)
+  addressNumber String @db.VarChar(255) @map("address_number")
+  addressComplement String @db.VarChar(255) @map("address_complement")
+  expirationDateAgreementCard DateTime? @db.Date @map("expiration_date_agreement_card")
+  cnsNumber String @db.VarChar(15) @map("cns_number")
+  importToken String @db.VarChar(255) @map("import_token")
+  contactType Int @map("contact_type") // @db.TinyInt ??
+  crefito String @db.VarChar(255)
+  area String @db.VarChar(255)
+  bankName String @db.VarChar(255) @map("bank_name")
+  bankCardAgency String @db.VarChar(255) @map("bank_card_agency")
+  bankCardNumber String @db.VarChar(255) @map("bank_card_number")
+  balance Decimal @db.Decimal(10, 2)
+  cnpj String @db.VarChar(255)
+  specialties String @db.VarChar(255)
+  importId Int @map("import_id")
+  country String @db.VarChar(255)
+  countryPhone String @db.VarChar(255) @map("country_phone")
+  countryPhoneCode String @db.VarChar(255) @map("country_phone_code")
+  pix String @db.VarChar(255)
+  beneficiaryCardName String @db.VarChar(255) @map("beneficiary_card_name")
+  professionalConcil String @db.VarChar(255) @map("professional_concil")
+  professionalConcilNumber String @db.VarChar(255) @map("professional_concil_number")
+  professionalConcilUf String @db.VarChar(255) @map("professional_concil_uf")
+  professionalCbos String @db.VarChar(255) @map("professional_cbos")
+  pixType String @db.VarChar(255) @map("pix_type")
+  signatureImageId Int @map("signature_image_id")
+  signatureImage Image? @relation("signatureImageContact", fields: [signatureImageId], references: [id])
+  attendanceType String @db.Text @map("attendance_type")
+  participationDegree String @db.Text @map("participation_degree")
+  school String @db.VarChar(255)
+  doctor String @db.VarChar(255)
+  medication String @db.VarChar(255)
+  appointmentReports Int? @map("appointment_reports") // @db.TinyInt ??
+  contactPreference String @db.VarChar(255) @map("contact_preference")
+  lastReportedAt DateTime? @db.Date() @map("last_reported_at")
+  allowAppointmentReminders Int @map("allow_appointment_reminders") // @db.TinyInt ??
+  allowEmailCampaigns Int @map("allow_email_campaigns") // @db.TinyInt ??
+  allowNps Int @map("allow_nps") // @db.TinyInt ??
+  dataResponible Int? @map("data_responible") // @db.TinyInt ??
+  responsibleCpf String @db.VarChar(255) @map("responsible_cpf")
+  responsibleRg String @db.VarChar(255) @map("responsible_rg")
+  responsibleEmail String @db.VarChar(255) @map("responsible_email")
+  responsibleCep String @db.VarChar(255) @map("responsible_cep")
+  responsibleAddress String @db.VarChar(255) @map("responsible_address")
+  responsibleAddressNumber String @db.VarChar(255) @map("responsible_address_number")
+  responsibleAddressComplement String @db.VarChar(255) @map("responsible_address_complement")
+  responsibleNeighborhood String @db.VarChar(255) @map("responsible_neighborhood")
+  responsibleCityId Int @map("responsible_city_id")
+  responsibleCity City? @relation(fields: [responsibleCityId], references: [id])
+  gympassToken String @db.VarChar(255) @map("gympass_token")
+  appUserContactId Int @map("app_user_contact_id")
+  fiquezenInviteSentAt DateTime? @db.Timestamp() @map("fiquezen_invite_sent_at")
+
+  images Image[] @relation("ContactImage")
+  users User[]
+}
+
+model Image {
+  @@map("images")
+
+  id       Int       @id @default(autoincrement())
+  src     String    @db.VarChar(255)
+  alt    String    @db.VarChar(255)
+  ext   String    @db.VarChar(255)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  entityId Int @map("entity_id")
+  entity Entity? @relation(fields: [entityId], references: [id])
+  alreadyChanged Int @map("already_changed") // @db.TinyInt ??
+  downloadCount Int @map("download_count") // @db.UnsignedInt ??
+  description String @db.VarChar(255)
+  userId  Int @map("user_id")
+  user User? @relation(fields: [userId], references: [id])
+  contactId Int @map("contact_id")
+  contact Contact? @relation("ContactImage", fields: [contactId], references: [id])
+  mktType Int @map("mkt_type") // @db.TinyInt ??
+  color String @db.VarChar(255)
+  watermarkPosition String @db.VarChar(255) @map("watermark_position")
+  isFree Int @map("is_free") // @db.TinyInt ??
+  editLink String @db.VarChar(255) @map("edit_link")
+  editType String @db.VarChar(255) @map("edit_type")
+  mktProfileId Int @map("mkt_profile_id")
+  mktProfile MktProfile? @relation(fields: [mktProfileId], references: [id])
+  
+  contacts Contact[] @relation("ImageContact")
+  mktProfiles MktProfile[] @relation("MktProfileImage")
+  signatureImageContact Contact[] @relation("signatureImageContact")
+
+}
+
+model MktProfile {
+  @@map("mkt_profiles")
+
+  id       Int       @id @default(autoincrement())
+  slug    String    @db.VarChar(191)
+  name     String    @db.VarChar(191)
+  address String    @db.VarChar(191)
+  neighborhood String    @db.VarChar(255)
+  addressNumber String    @db.VarChar(255) @map("address_number")
+  phone String    @db.VarChar(191)
+  whatsapp String    @db.VarChar(191)
+  email String    @db.VarChar(255)
+  description String    @db.Text
+  slogan String    @db.VarChar(255)
+  cityId Int @map("city_id")
+  city City? @relation(fields: [cityId], references: [id])
+  logoImgId Int @map("logo_img_id")
+  logoImg Image? @relation("MktProfileImage" ,fields: [logoImgId], references: [id])
+  backgroundTemplate Int @db.SmallInt @map("background_template")
+  latitude Float?
+  longitude Float?
+  facebook String @db.VarChar(255)
+  twitter String @db.VarChar(255)
+  instagram String @db.VarChar(255)
+  entityId Int @map("entity_id")
+  entity Entity? @relation(fields: [entityId], references: [id])
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  urlDomain String @db.VarChar(255) @map("url_domain")
+  complement String @db.VarChar(255)
+  site String @db.VarChar(255)
+  cep String @db.VarChar(255)
+  origin String @db.VarChar(255)
+  showOnPlataform Int @db.SmallInt @map("show_on_plataform")
+  youtube String @db.VarChar(255)
+  showWhatsappBtn Int? @map("show_whatsapp_btn") // @db.TinyInt ??
+  scheduleType Int @map("schedule_type") // @db.TinyInt ??
+
+  image Image[]
+}
+
+model City {
+  @@map("cities")
+
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(255)
+  ibgeCode String    @db.VarChar(20) @map("ibge_code")
+  stateId Int @map("state_id")
+  state State? @relation(fields: [stateId], references: [id])
+  slug String @db.VarChar(255)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  latitude      Float?
+  longitude     Float?
+  img String @db.VarChar(255)
+
+  mktProfile MktProfile[]
+  contacts Contact[]
+}
+
+model State {
+  @@map("states")
+
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(50)
+  abbreviation String    @db.VarChar(5)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+
+  city City[]
+}
+
+model Agreement {
+  @@map("agreements")
+
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(255)
+  entityId Int @map("entity_id")
+  entity Entity? @relation(fields: [entityId], references: [id])
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  ansCode String @db.VarChar(6) @map("ans_code")
+  gracePeriod Int @map("grace_period")
+  deletedAt DateTime @map("deleted_at")
+
+  contacts Contact[]
+}
+
+model Doctor {
+  @@map("doctors")
+
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(255)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  cpf String @db.VarChar(255)
+  clinicName String @db.VarChar(255) @map("clinic_name")
+  concil String @db.VarChar(255)
+  concilNumber String @db.VarChar(255) @map("concil_number")
+  concilUf String @db.VarChar(255) @map("concil_uf")
+  cbos String @db.VarChar(255)
+  entityId Int @map("entity_id")
+  entity Entity? @relation(fields: [entityId], references: [id])
+  address String @db.VarChar(255)
+  addressComplement String @db.VarChar(255) @map("address_complement")
+  neighbourhood String @db.VarChar(255)
+  addressNumber Int @map("address_number")
+  phone String @db.VarChar(255)
+  cep String @db.VarChar(255)
+  state String @db.VarChar(255)
+  city String @db.VarChar(255)
+  deletedAt DateTime @map("deleted_at")
+
+  contacts Contact[]
+}
+
+model Import {
+  @@map("imports")
+
+  id       Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  qtySuccess Int @map("qty_success")
+  qtyFail Int @map("qty_fail")
+  userId Int @map("user_id")
+  user User? @relation(fields: [userId], references: [id])
+  entityId Int @map("entity_id")
+  entity Entity? @relation(fields: [entityId], references: [id])
+  csvId Int @map("csv_id")
+  logId Int @map("log_id")
+  finishedAt DateTime @db.Timestamp() @map("finished_at")
+  deletedAt DateTime @db.Timestamp() @map("deleted_at")
+  failedAt DateTime @db.Timestamp() @map("failed_at")  
 }

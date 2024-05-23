@@ -1,5 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { PrismaService } from './database/prisma/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { FinanceModule } from './modules/finance/finance.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
