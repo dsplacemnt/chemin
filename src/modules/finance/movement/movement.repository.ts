@@ -9,7 +9,7 @@ export class MovementRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(createMovementDto: CreateMovementDto) {
-    return await this.prisma.movement.create({ data: createMovementDto });
+    return await 'not working yet'; // this.prisma.movement.create({ data: createMovementDto });
   }
 
   async findAll() {
@@ -21,7 +21,7 @@ export class MovementRepository {
   }
 
   async update(id: number, updateMovementDto: UpdateMovementDto) {
-    return await this.prisma.movement.update({ where: { id }, data: updateMovementDto });
+    return await 'not working yet'; // this.prisma.movement.update({ where: { id }, data: updateMovementDto });
   }
 
   async remove(id: number) {

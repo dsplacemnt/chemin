@@ -2,7 +2,9 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from 
 import { MovementService } from './movement.service';
 import { CreateMovementDto } from './dto/createMovement.dto';
 import { UpdateMovementDto } from './dto/updateMovement.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('movement')
 @Controller('movement')
 export class MovementController {
   constructor(private readonly movementService: MovementService) {}
