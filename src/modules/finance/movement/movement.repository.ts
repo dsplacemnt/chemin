@@ -8,7 +8,7 @@ export class MovementRepository {
   constructor(private prisma: PrismaService) {}
 
   // TODO
-  // do it in a way that does not need to pass every attribute
+  // use prisma create input instead of dto in create method
   // add return to this method with a promise
   async create(createMovementDto: CreateMovementDto) {
     try {
@@ -38,7 +38,7 @@ export class MovementRepository {
   }
 
   // TODO
-  // do it in a way that does not need to pass every attribute
+  // use prisma update input instead of dto in update method
   // add return to this method with a promise
   async update(id: number, updateMovementDto: UpdateMovementDto) {
     try {
