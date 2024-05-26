@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNumber, IsString } from 'class-validator';
 
-export class UpdateMovementDto {
-  @ApiProperty({ required: false })
+export class CreateMovementDto {
+  @ApiProperty()
   @IsString()
   description: string;
 
@@ -49,10 +49,6 @@ export class UpdateMovementDto {
   @ApiProperty()
   @IsNumber()
   entityId: number;
-
-  @ApiProperty()
-  @IsString()
-  agreementText: string;
 
   @ApiProperty()
   @IsString()

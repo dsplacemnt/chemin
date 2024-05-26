@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMovementDto } from './dto/createMovement.dto';
-import { UpdateMovementDto } from './dto/updateMovement.dto';
+import { CreateMovementDto } from './dto/create-movement.dto';
+import { UpdateMovementDto } from './dto/update-movement.dto';
 import { MovementRepository } from './movement.repository';
 
 @Injectable()
