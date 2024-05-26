@@ -24,14 +24,27 @@
 
 ## Description
 
-[NestJS](https://github.com/nestjs/nest) as base framework
-[Fastify](https://github.com/fastify/fastify) handling requests
-[Swagger](https://github.com/swagger-api/swagger-ui) as rest api docs
-[TypeScript](https://github.com/microsoft/TypeScript) as main language
-[Prisma](https://github.com/prisma/prisma) as ORM
-[MySQL](https://www.mysql.com/) as default DB(for now)
+??
+
+## Stack
+
+[NestJS](https://github.com/nestjs/nest) as base framework\
+[Fastify](https://github.com/fastify/fastify) handling requests\
+[Swagger](https://github.com/swagger-api/swagger-ui) as rest api docs\
+[TypeScript](https://github.com/microsoft/TypeScript) as main language\
+[Prisma](https://github.com/prisma/prisma) as ORM\
+[MySQL](https://www.mysql.com/) as default DB(for now)\
+[PNPM](https://github.com/pnpm/pnpm) as package manager
 
 ## Installation
+
+Use npm to install pnpm first
+
+```bash
+$ npm install -g pnpm
+```
+
+Then simply
 
 ```bash
 $ pnpm install
@@ -50,7 +63,7 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
-## Test - Not working yet
+## Test - Not imple,emted yet
 
 ```bash
 # unit tests
