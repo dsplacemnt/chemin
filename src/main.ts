@@ -8,12 +8,12 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Chemin')
-    .setDescription('Description of the API')
+    .setDescription('API REST pour la gestion des mouvements financiers :D')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(3000);
 }
 bootstrap();

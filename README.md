@@ -63,7 +63,7 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
-## Test - Not imple,emted yet
+## Test - Not implemented yet
 
 ```bash
 # unit tests
