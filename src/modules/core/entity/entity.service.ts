@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEntityDto } from './dto/create-entity.dto';
-import { UpdateEntityDto } from './dto/update-entity.dto';
 import { EntityRepository } from './entity.repository';
+import { Entity } from './entity.model';
 
 @Injectable()
 export class EntityService {
   constructor(private entityRepository: EntityRepository) {}
 
-  create(createEntityDto: CreateEntityDto) {
-    return this.entityRepository.create(createEntityDto);
+  create(entity: Entity) {
+    return this.entityRepository.create(entity);
   }
 
   findAll() {

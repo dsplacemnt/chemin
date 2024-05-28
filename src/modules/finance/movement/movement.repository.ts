@@ -1,64 +1,28 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma/prisma.service';
-import { CreateMovementDto } from './dto/create-movement.dto';
-import { UpdateMovementDto } from './dto/update-movement.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MovementRepository {
   constructor(private prisma: PrismaService) {}
 
-  // TODO
-  // use prisma create input instead of dto in create method
-  // add return to this method with a promise
-  async create(createMovementDto: CreateMovementDto) {
-    try {
-      let createdMovement = await this.prisma.movements.create({
-        data: {
-          ...createMovementDto,
-        },
-      });
-      const createdMovementDeserialized = JSON.stringify(createdMovement, (key, value) =>
-        typeof value === 'bigint' ? value.toString() + 'n' : value,
-      );
-      return JSON.parse(createdMovementDeserialized);
-    } catch (error) {
-      throw new InternalServerErrorException('Something bad happened', {
-        cause: new Error(),
-        description: error.message,
-      });
-    }
+  async create(movementCreateInput: Prisma.MovementCreateInput) {
+    return await this.prisma.movement.create({ data: movementCreateInput });
   }
 
   async findAll() {
-    return await this.prisma.movements.findMany();
+    return await this.prisma.movement.findMany();
   }
 
   async findOne(id: number) {
-    return await this.prisma.movements.findUnique({ where: { id } });
+    return await this.prisma.movement.findUnique({ where: { id } });
   }
 
-  // TODO
-  // use prisma update input instead of dto in update method
-  // add return to this method with a promise
-  async update(id: number, updateMovementDto: UpdateMovementDto) {
-    try {
-      let updatedMovement = await this.prisma.movements.update({
-        where: { id },
-        data: updateMovementDto,
-      });
-      const updatedMovementDeserialized = JSON.stringify(updatedMovement, (key, value) =>
-        typeof value === 'bigint' ? value.toString() + 'n' : value,
-      );
-      return JSON.parse(updatedMovementDeserialized);
-    } catch (error) {
-      throw new InternalServerErrorException('Something bad happened', {
-        cause: new Error(),
-        description: error.message,
-      });
-    }
+  async update(id: number, updateMovementDto: Prisma.MovementUpdateInput) {
+    return await this.prisma.movement.update({ where: { id }, data: updateMovementDto });
   }
 
   async remove(id: number) {
-    return await this.prisma.movements.delete({ where: { id } });
+    return await this.prisma.movement.delete({ where: { id } });
   }
 }

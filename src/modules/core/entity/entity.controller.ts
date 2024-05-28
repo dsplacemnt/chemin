@@ -1,15 +1,16 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { EntityService } from './entity.service';
-import { CreateEntityDto } from './dto/create-entity.dto';
-import { UpdateEntityDto } from './dto/update-entity.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { Entity } from './entity.model';
 
-@Controller('entities')
+@ApiTags('entity')
+@Controller('entity')
 export class EntityController {
   constructor(private readonly entityService: EntityService) {}
 
   @Post()
-  create(@Body() createEntityDto: CreateEntityDto) {
-    return this.entityService.create(createEntityDto);
+  create(@Body() entity: Entity) {
+    return this.entityService.create(entity);
   }
 
   @Get()
@@ -23,8 +24,8 @@ export class EntityController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEntityDto: UpdateEntityDto) {
-    return this.entityService.update(+id, updateEntityDto);
+  update(@Param('id') id: string, @Body() entity: Entity) {
+    return this.entityService.update(+id, entity);
   }
 
   @Delete(':id')

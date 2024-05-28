@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Entity {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   name      String
@@ -19,7 +19,7 @@ model Entity {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   name      String
@@ -35,7 +35,7 @@ model User {
 }
 
 model Roles {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
@@ -46,13 +46,13 @@ model Roles {
 }
 
 model Member {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map("user_id")
-  entity    Entity   @relation(fields: [entityId], references: [id])
-  entityId  String   @map("entity_id")
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
+  Entity    Entity   @relation(fields: [entityId], references: [id])
+  entityId  Int      @map("entity_id")
 
   movements Movement[]
 
@@ -60,21 +60,21 @@ model Member {
 }
 
 model Movement {
-  id        String       @id @default(cuid())
+  id        Int          @id @default(autoincrement())
   createdAt DateTime     @default(now()) @map("created_at")
   updatedAt DateTime     @updatedAt @map("updated_at")
   date      DateTime
   value     Float
   member    Member       @relation(fields: [memberId], references: [id])
-  memberId  String       @map("member_id")
-  typeId    String       @map("type_id")
+  memberId  Int          @map("member_id")
   type      MovementType @relation(fields: [typeId], references: [id])
+  typeId    Int          @map("type_id")
 
   @@map(name: "movements")
 }
 
 model MovementType {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
