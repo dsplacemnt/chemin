@@ -1,35 +1,42 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { EntityService } from './entity.service';
-import { ApiTags } from '@nestjs/swagger';
-import { Entity } from './entity.model';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { CreateEntityDto } from './dto/create-entity.dto';
+import { UpdateEntityDto } from './dto/update-entity.dto';
+import { EntityEntity } from './entity.entity';
 
-@ApiTags('entity')
 @Controller('entity')
+@ApiTags('entity')
 export class EntityController {
   constructor(private readonly entityService: EntityService) {}
 
   @Post()
-  create(@Body() entity: Entity) {
-    return this.entityService.create(entity);
+  @ApiCreatedResponse({ type: EntityEntity })
+  create(@Body() createEntityDto: CreateEntityDto) {
+    return this.entityService.create(createEntityDto);
   }
 
   @Get()
+  @ApiOkResponse({ type: EntityEntity, isArray: true })
   findAll() {
     return this.entityService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.entityService.findOne(+id);
+  @ApiOkResponse({ type: EntityEntity })
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.entityService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() entity: Entity) {
-    return this.entityService.update(+id, entity);
+  @ApiCreatedResponse({ type: EntityEntity })
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateEntityDto: UpdateEntityDto) {
+    return this.entityService.update(id, updateEntityDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.entityService.remove(+id);
+  @ApiOkResponse({ type: EntityEntity })
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.entityService.remove(id);
   }
 }

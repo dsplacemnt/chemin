@@ -1,27 +1,29 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { CreateEntityDto } from './dto/create-entity.dto';
+import { UpdateEntityDto } from './dto/update-entity.dto';
+import { EntityEntity } from './entity.entity';
 @Injectable()
 export class EntityRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(entity: Prisma.EntityCreateInput) {
+  async create(createEntityDto: CreateEntityDto): Promise<EntityEntity> {
     return await this.prisma.entity.create({ data: createEntityDto });
   }
 
-  async findAll() {
+  async findAll(): Promise<EntityEntity[]> {
     return await this.prisma.entity.findMany();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<EntityEntity> {
     return await this.prisma.entity.findUnique({ where: { id } });
   }
 
-  async update(id: number, UpdateEntityDto: Prisma.EntityUpdateInput) {
-    return await this.prisma.entity.update({ where: { id }, data: UpdateEntityDto });
+  async update(id: number, updateEntityDto: UpdateEntityDto): Promise<EntityEntity> {
+    return await this.prisma.entity.update({ where: { id }, data: updateEntityDto });
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<EntityEntity> {
     return await this.prisma.entity.delete({ where: { id } });
   }
 }

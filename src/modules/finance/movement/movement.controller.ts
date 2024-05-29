@@ -1,36 +1,42 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { MovementService } from './movement.service';
 import { CreateMovementDto } from './dto/create-movement.dto';
 import { UpdateMovementDto } from './dto/update-movement.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { MovementEntity } from './movement.entity';
 
-@ApiTags('movement')
 @Controller('movement')
+@ApiTags('movement')
 export class MovementController {
-  constructor(private readonly movementsService: MovementService) {}
+  constructor(private readonly movementService: MovementService) {}
 
   @Post()
-  create(@Body() createMovementDto: CreateMovementDto) {
-    return this.movementsService.create(createMovementDto);
+  @ApiCreatedResponse({ type: MovementEntity })
+  async create(@Body() createMovementDto: CreateMovementDto): Promise<MovementEntity> {
+    return await this.movementService.create(createMovementDto);
   }
 
   @Get()
-  findAll() {
-    return this.movementsService.findAll();
+  @ApiOkResponse({ isArray: true, type: MovementEntity })
+  findAll(): Promise<MovementEntity[]> {
+    return this.movementService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.movementsService.findOne(id);
+  @ApiOkResponse({ type: MovementEntity })
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<MovementEntity> {
+    return this.movementService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateMovementDto: UpdateMovementDto) {
-    return this.movementsService.update(id, updateMovementDto);
+  @ApiCreatedResponse({ type: MovementEntity })
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateMovementDto: UpdateMovementDto): Promise<MovementEntity> {
+    return this.movementService.update(id, updateMovementDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.movementsService.remove(id);
+  @ApiOkResponse({ type: MovementEntity })
+  remove(@Param('id', ParseIntPipe) id: number): Promise<MovementEntity> {
+    return this.movementService.remove(id);
   }
 }

@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { MovementRepository } from './movement.repository';
 import { CreateMovementDto } from './dto/create-movement.dto';
 import { UpdateMovementDto } from './dto/update-movement.dto';
-import { MovementRepository } from './movement.repository';
+import { MovementEntity } from './movement.entity';
 
 @Injectable()
 export class MovementService {
   constructor(private movementRespository: MovementRepository) {}
 
-  async create(createMovementDto: CreateMovementDto) {
+  async create(createMovementDto: CreateMovementDto): Promise<MovementEntity> {
     return await this.movementRespository.create(createMovementDto);
   }
 

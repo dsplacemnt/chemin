@@ -2,8 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { MovementTypeService } from './movement-type.service';
 import { CreateMovementTypeDto } from './dto/create-movement-type.dto';
 import { UpdateMovementTypeDto } from './dto/update-movement-type.dto';
-
+import { ApiTags } from '@nestjs/swagger';
 @Controller('movement-type')
+@ApiTags('movement-type')
 export class MovementTypeController {
   constructor(private readonly movementTypeService: MovementTypeService) {}
 

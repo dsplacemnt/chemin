@@ -23,14 +23,12 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   name      String
-  email     String
+  email     String   @unique
   password  String
   role      String
 
-  members Member[]
-  roles   Roles[]
+  roles Roles[]
 
-  @@unique([email])
   @@map(name: "users")
 }
 
@@ -49,10 +47,8 @@ model Member {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  User      User     @relation(fields: [userId], references: [id])
-  userId    Int      @map("user_id")
   Entity    Entity   @relation(fields: [entityId], references: [id])
-  entityId  Int      @map("entity_id")
+  entityId  Int      @unique @map("entity_id")
 
   movements Movement[]
 
@@ -60,15 +56,15 @@ model Member {
 }
 
 model Movement {
-  id        Int          @id @default(autoincrement())
-  createdAt DateTime     @default(now()) @map("created_at")
-  updatedAt DateTime     @updatedAt @map("updated_at")
-  date      DateTime
-  value     Float
-  member    Member       @relation(fields: [memberId], references: [id])
-  memberId  Int          @map("member_id")
-  type      MovementType @relation(fields: [typeId], references: [id])
-  typeId    Int          @map("type_id")
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  date           DateTime
+  value          Float
+  member         Member       @relation(fields: [memberId], references: [id])
+  memberId       Int          @unique @map("member_id")
+  movementType   MovementType @relation(fields: [movementTypeId], references: [id])
+  movementTypeId Int          @unique @map("movement_type_id")
 
   @@map(name: "movements")
 }

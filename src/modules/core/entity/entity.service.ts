@@ -1,28 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { EntityRepository } from './entity.repository';
-import { Entity } from './entity.model';
+import { CreateEntityDto } from './dto/create-entity.dto';
+import { UpdateEntityDto } from './dto/update-entity.dto';
+import { EntityEntity } from './entity.entity';
 
 @Injectable()
 export class EntityService {
   constructor(private entityRepository: EntityRepository) {}
 
-  create(entity: Entity) {
-    return this.entityRepository.create(entity);
+  async create(createEntityDto: CreateEntityDto): Promise<EntityEntity> {
+    return await this.entityRepository.create(createEntityDto);
   }
 
-  findAll() {
-    return this.entityRepository.findAll();
+  async findAll(): Promise<EntityEntity[]> {
+    return await this.entityRepository.findAll();
   }
 
-  findOne(id: number) {
-    return this.entityRepository.findOne(id);
+  async findOne(id: number): Promise<EntityEntity> {
+    return await this.entityRepository.findOne(id);
   }
 
-  update(id: number, updateEntityDto: UpdateEntityDto) {
-    return this.entityRepository.update(id, updateEntityDto);
+  async update(id: number, updateEntityDto: UpdateEntityDto): Promise<EntityEntity> {
+    return await this.entityRepository.update(id, updateEntityDto);
   }
 
-  remove(id: number) {
-    return this.entityRepository.remove(id);
+  async remove(id: number): Promise<EntityEntity> {
+    return await this.entityRepository.remove(id);
   }
 }
