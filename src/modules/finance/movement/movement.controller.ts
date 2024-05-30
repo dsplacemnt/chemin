@@ -3,7 +3,7 @@ import { MovementService } from './movement.service';
 import { CreateMovementDto } from './dto/create-movement.dto';
 import { UpdateMovementDto } from './dto/update-movement.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { MovementEntity } from './movement.entity';
+import { MovementEntity } from './entities/movement.entity';
 
 @Controller('movement')
 @ApiTags('movement')

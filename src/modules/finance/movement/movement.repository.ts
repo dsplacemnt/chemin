@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma/prisma.service';
-import { MovementEntity } from './movement.entity';
+import { MovementEntity } from './entities/movement.entity';
 import { CreateMovementDto } from './dto/create-movement.dto';
 import { UpdateMovementDto } from './dto/update-movement.dto';
 

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MovementRepository } from './movement.repository';
 import { CreateMovementDto } from './dto/create-movement.dto';
 import { UpdateMovementDto } from './dto/update-movement.dto';
-import { MovementEntity } from './movement.entity';
+import { MovementEntity } from './entities/movement.entity';
 
 @Injectable()
 export class MovementService {

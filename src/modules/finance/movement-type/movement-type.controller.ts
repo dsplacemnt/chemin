@@ -1,7 +1,34 @@
-import { Controller } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { MovementTypeEntity } from './movement-type.entity';
-import { BaseCrudController } from 'src/common/base/base-crud.controller';
-@Controller('movement-type')
-@ApiTags('movement-type')
-export class MovementTypeController extends BaseCrudController<MovementTypeEntity> {}
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { MovementTypeService } from './movement-type.service';
+import { CreateMovementTypeDto } from './dto/create-movement-type.dto';
+import { UpdateMovementTypeDto } from './dto/update-movement-type.dto';
+
+@Controller('movementType')
+export class MovementTypeController {
+  constructor(private readonly movementTypeService: MovementTypeService) {}
+
+  @Post()
+  create(@Body() createMovementTypeDto: CreateMovementTypeDto) {
+    return this.movementTypeService.create(createMovementTypeDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.movementTypeService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.movementTypeService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateMovementTypeDto: UpdateMovementTypeDto) {
+    return this.movementTypeService.update(id, updateMovementTypeDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.movementTypeService.remove(id);
+  }
+}

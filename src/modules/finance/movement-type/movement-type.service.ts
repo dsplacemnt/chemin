@@ -1,6 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { MovementTypeEntity } from './movement-type.entity';
-import { BaseCrudService } from 'src/common/base/base-crud.service';
+import { CreateMovementTypeDto } from './dto/create-movement-type.dto';
+import { UpdateMovementTypeDto } from './dto/update-movement-type.dto';
+import { MovementTypeRepository } from './movement-type.repository';
 
 @Injectable()
-export class MovementTypeService extends BaseCrudService<MovementTypeEntity> {}
+export class MovementTypeService {
+  constructor(private readonly movementTypeRepository: MovementTypeRepository) {}
+
+  create(createMovementTypeDto: CreateMovementTypeDto) {
+    return this.movementTypeRepository.create(createMovementTypeDto);
+  }
+
+  findAll() {
+    return this.movementTypeRepository.findAll();
+  }
+
+  findOne(id: number) {
+    return this.movementTypeRepository.findOne(id);
+  }
+
+  update(id: number, updateMovementTypeDto: UpdateMovementTypeDto) {
+    return this.movementTypeRepository.update(id, updateMovementTypeDto);
+  }
+
+  remove(id: number) {
+    return this.movementTypeRepository.remove(id);
+  }
+}

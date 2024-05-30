@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MovementTypeService } from './movement-type.service';
 import { MovementTypeController } from './movement-type.controller';
-import { BaseCrudService } from 'src/common/base/base-crud.service';
-import { BaseCrudRepository } from 'src/common/base/base-crud.repository';
+import { MovementTypeRepository } from './movement-type.repository';
+import { PrismaService } from 'src/database/prisma/prisma.service';
 
 @Module({
   imports: [],
   controllers: [MovementTypeController],
-  providers: [MovementTypeService, BaseCrudService, BaseCrudRepository],
+  providers: [MovementTypeService, MovementTypeRepository, PrismaService],
 })
 export class MovementTypeModule {}

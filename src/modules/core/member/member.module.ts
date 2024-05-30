@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { MemberController } from './member.controller';
-import { BaseCrudRepository } from 'src/common/base/base-crud.repository';
-import { BaseCrudService } from 'src/common/base/base-crud.service';
+import { MemberRepository } from './member.repository';
+import { PrismaService } from 'src/database/prisma/prisma.service';
 
 @Module({
   controllers: [MemberController],
-  providers: [MemberService, BaseCrudService, BaseCrudRepository],
+  providers: [MemberService, MemberRepository, PrismaService],
 })
 export class MemberModule {}
