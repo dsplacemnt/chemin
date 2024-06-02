@@ -9,16 +9,7 @@ export class MovementRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(createMovementDto: CreateMovementDto): Promise<MovementEntity> {
-    const { memberId, movementTypeId, ...movementData } = createMovementDto;
-    return new MovementEntity(
-      await this.prisma.movement.create({
-        data: {
-          ...movementData,
-          member: { connect: { id: memberId } },
-          movementType: { connect: { id: movementTypeId } },
-        },
-      }),
-    );
+    return new MovementEntity(await this.prisma.movement.create({ data: createMovementDto }));
   }
 
   async findAll(): Promise<MovementEntity[]> {

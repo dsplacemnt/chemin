@@ -5,4 +5,8 @@ export class CreateMovementTypeDto {
   @ApiProperty({ required: true })
   @IsString()
   name: string;
+
+  @ApiProperty()
+  @IsString()
+  organizationId: number;
 }

@@ -8,62 +8,65 @@ datasource db {
 }
 
 model Organization {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
+  name String
+
+  users        User[]
+  members      Member[]
+  roles        Role[]
+  movements    Movement[]
+  movemetTypes MovementType[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  name      String
-
-  members Member[]
 
   @@map(name: "organizations")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
+  name     String
+  email    String @unique
+  password String
+
+  organizationId Int          @map("organization_id")
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+
+  roles Role[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  name      String
-  email     String   @unique
-  password  String
-
-  roles        Role[]
-  RolesOnUsers RolesOnUsers[]
 
   @@map(name: "users")
 }
 
 model Role {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
+  name String
+
+  organizationId Int          @map("organization_id")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  users User[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  name      String
-
-  users        User[]
-  RolesOnUsers RolesOnUsers[]
 
   @@map(name: "roles")
 }
 
-model RolesOnUsers {
-  role       Role     @relation(fields: [roleId], references: [id])
-  roleId     Int
-  user       User     @relation(fields: [userId], references: [id])
-  userId     Int
-  assignedAt DateTime @default(now())
-  assignedBy String
-
-  @@id([roleId, userId])
-  @@map("roles_on_users")
-}
-
 model Member {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now()) @map("created_at")
-  updatedAt      DateTime     @updatedAt @map("updated_at")
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  name      String
+  email     String
+
+  organizationId Int          @map("organization_id")
   organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId Int          @unique @map("organization_id")
-  name           String
-  email          String
 
   movements Movement[]
 
@@ -71,26 +74,36 @@ model Member {
 }
 
 model Movement {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now()) @map("created_at")
-  updatedAt      DateTime     @updatedAt @map("updated_at")
-  date           DateTime
-  value          Float
+  id Int @id @default(autoincrement())
+
+  date  DateTime
+  value Float
+
+  memberId       Int          @map("member_id")
   member         Member       @relation(fields: [memberId], references: [id])
-  memberId       Int          @unique @map("member_id")
+  movementTypeId Int          @map("movement_type_id")
   movementType   MovementType @relation(fields: [movementTypeId], references: [id])
-  movementTypeId Int          @unique @map("movement_type_id")
+  organizationId Int          @map("organization_id")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map(name: "movements")
 }
 
 model MovementType {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
+  id Int @id @default(autoincrement())
+
+  name String
+
+  organizationId Int          @map("organization_id")
+  organization   Organization @relation(fields: [organizationId], references: [id])
 
   movements Movement[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "movement_types")
 }

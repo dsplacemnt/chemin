@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { OrganizationService } from './organization.service';
 import { OrganizationEntity } from './entities/organization.entity';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
@@ -7,6 +7,7 @@ import { UpdateOrganizationDto } from './dto/update-organization.dto';
 
 @Controller('organization')
 @ApiTags('organization')
+@ApiBearerAuth('JWT')
 export class OrganizationController {
   constructor(private readonly movementService: OrganizationService) {}
 

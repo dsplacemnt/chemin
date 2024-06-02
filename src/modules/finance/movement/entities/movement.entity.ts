@@ -2,6 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Movement } from '@prisma/client';
 import { MovementTypeEntity } from '../../movement-type/entities/movement-type.entity';
 import { MemberEntity } from 'src/modules/core/member/member.entity';
+import { IsNumber } from 'class-validator';
+import { OrganizationEntity } from 'src/modules/core/organization/entities/organization.entity';
 
 export class MovementEntity implements Movement {
   constructor({ member, movementType, ...data }: Partial<MovementEntity>) {
@@ -41,4 +43,11 @@ export class MovementEntity implements Movement {
 
   @ApiProperty({ type: MovementTypeEntity })
   movementType: MovementTypeEntity;
+
+  @ApiProperty()
+  @IsNumber()
+  organizationId: number;
+
+  @ApiProperty()
+  organization: OrganizationEntity;
 }

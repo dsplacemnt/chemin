@@ -2,8 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from 
 import { MovementTypeService } from './movement-type.service';
 import { CreateMovementTypeDto } from './dto/create-movement-type.dto';
 import { UpdateMovementTypeDto } from './dto/update-movement-type.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('movementType')
+@ApiTags('movementType')
+@ApiBearerAuth('JWT')
 export class MovementTypeController {
   constructor(private readonly movementTypeService: MovementTypeService) {}
 

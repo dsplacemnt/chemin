@@ -2,22 +2,27 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateMovementDto {
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
   date: Date;
 
-  @IsNumber()
   @ApiProperty()
+  @IsNumber()
   value: number;
 
+  @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  @ApiProperty()
   memberId: number;
 
+  @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  @ApiProperty()
   movementTypeId: number;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  organizationId: number;
 }
