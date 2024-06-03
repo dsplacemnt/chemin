@@ -41,9 +41,6 @@ dependencies:
   fastify:
     specifier: ^4.27.0
     version: 4.27.0
-  prisma-client:
-    specifier: ^0.0.0
-    version: 0.0.0
   reflect-metadata:
     specifier: ^0.2.2
     version: 0.2.2
@@ -4704,10 +4701,6 @@ packages:
       ansi-styles: 5.2.0
       react-is: 18.3.1
     dev: true
-
-  /prisma-client@0.0.0:
-    resolution: {integrity: sha512-tbK0ZaUt4E9IkQalS+2V5dv45lTcwxWNSXenRNEgSuzTJWW3T6SUgBfuk0gUS5wC07eQNEOU6/SVomVL/hsaHw==}
-    dev: false
 
   /prisma@5.14.0:
     resolution: {integrity: sha512-gCNZco7y5XtjrnQYeDJTiVZmT/ncqCr5RY1/Cf8X2wgLRmyh9ayPAGBNziI4qEE4S6SxCH5omQLVo9lmURaJ/Q==}
