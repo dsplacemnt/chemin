@@ -1,13 +1,11 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { FinanceModule } from './modules/finance/finance.module';
 import { CoreModule } from './modules/core/core.module';
 import { OrganizationModule } from './modules/core/organization/organization.module';
 import { UserModule } from './modules/core/user/user.module';
+import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './modules/auth/auth.module';
-import { AuthGuard } from './modules/auth/auth.guard';
-import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -17,17 +15,13 @@ import { APP_GUARD } from '@nestjs/core';
     OrganizationModule,
     UserModule,
     AuthModule,
+    PassportModule,
   ],
   controllers: [],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-  ],
+  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('movement');
+    // consumer.apply(LoggerMiddleware).forRoutes('movement');
   }
 }

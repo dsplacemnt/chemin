@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from '../core/user/user.repository';
-import { SignInDto } from './dto/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserEntity } from 'src/modules/core/user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -10,14 +10,19 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(signInDto: SignInDto): Promise<{ accessToken: string }> {
-    const userEntity = await this.userRepository.findUserByEmail(signInDto.email);
-    if (userEntity?.password !== signInDto.password) {
-      throw new UnauthorizedException();
+  async validateUser(email: string, password: string): Promise<Partial<UserEntity>> {
+    const userEntity = await this.userRepository.findByEmail(email);
+    if (userEntity && userEntity.password === password) {
+      const { password, ...result } = userEntity;
+      return result;
     }
-    const { password, ...result } = userEntity;
-    const payload = { sub: result.id, email: result.email };
-    const accessToken = await this.jwtService.signAsync(payload);
-    return { accessToken };
+    return null;
+  }
+
+  async login(userEntity: Partial<UserEntity>): Promise<{ access_token: string }> {
+    const payload = { email: userEntity.email, sub: userEntity.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }

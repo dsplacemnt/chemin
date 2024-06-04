@@ -29,7 +29,7 @@ export class UserRepository {
   async remove(id: number): Promise<UserEntity> {
     return await this.prismaService.user.delete({ where: { id } });
   }
-  async findUserByEmail(email: string): Promise<UserEntity> {
+  async findByEmail(email: string): Promise<UserEntity> {
     return await this.prismaService.user.findUnique({ where: { email } });
   }
 }
