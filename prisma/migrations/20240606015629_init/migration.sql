@@ -70,6 +70,20 @@ CREATE TABLE "movement_types" (
 );
 
 -- CreateTable
+CREATE TABLE "meetings" (
+    "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "start_time" TIMESTAMP(3) NOT NULL,
+    "end_time" TIMESTAMP(3) NOT NULL,
+    "organization_id" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "meetings_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_RoleToUser" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -104,6 +118,9 @@ ALTER TABLE "movements" ADD CONSTRAINT "movements_organization_id_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "movement_types" ADD CONSTRAINT "movement_types_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organizations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "meetings" ADD CONSTRAINT "meetings_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organizations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_RoleToUser" ADD CONSTRAINT "_RoleToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE;

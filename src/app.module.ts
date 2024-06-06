@@ -6,6 +6,7 @@ import { OrganizationModule } from './modules/core/organization/organization.mod
 import { UserModule } from './modules/core/user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './modules/auth/auth.module';
+import { MeetingModule } from './modules/scheduling/meeting/meeting.module';
 
 @Module({
   imports: [
@@ -16,9 +17,8 @@ import { AuthModule } from './modules/auth/auth.module';
     UserModule,
     AuthModule,
     PassportModule,
+    MeetingModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

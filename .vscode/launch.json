@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug NestJS Framework",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["run", "start:debug", "--", "--inspect-brk"],
+      "autoAttachChildProcesses": true,
+      "restart": true,
+      "sourceMaps": true,
+      "stopOnEntry": false,
+      "console": "integratedTerminal"
+    }
+  ]
+}

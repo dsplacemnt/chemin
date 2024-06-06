@@ -4,7 +4,5 @@ import { MovementTypeModule } from './movement-type/movement-type.module';
 
 @Module({
   imports: [MovementModule, MovementTypeModule],
-  controllers: [],
-  providers: [],
 })
 export class FinanceModule {}
